@@ -7,7 +7,7 @@ namespace Twitter.Text
     /// <summary>
     /// Patterns and regular expressions used by the twitter text methods.
     /// </summary>
-    public static class Regex
+    internal static class Regex
     {
         /// <summary>
         /// Static constructor
@@ -15,18 +15,36 @@ namespace Twitter.Text
         static Regex()
         {
             //
-            // Create the equivalent of Java's \p{Alnum}
+            // Create the equivalent of Java's \p{Alpha}
             // See http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
             //
-            // \p{Alnum}    An alphanumeric character:[\p{Alpha}\p{Digit}]
             // \p{Alpha}    An alphabetic character:[\p{Lower}\p{Upper}]
             // \p{Lower}    A lower-case alphabetic character: [a-z]
             // \p{Upper}    An upper-case alphabetic character:[A-Z]
+            //
+            // Note: It is meant to be used in a character group
+            //
+            String ALPHA_CHARS = "a-zA-Z";
+
+            //
+            // Create the equivalent of Java's \p{Digit}
+            // See http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+            //
             // \p{Digit}    A decimal digit: [0-9]
             //
             // Note: It is meant to be used in a character group
             //
-            String ALNUM_CHARS = "a-zA-Z0-9";
+            String NUM_CHARS = "0-9";
+
+            //
+            // Create the equivalent of Java's \p{Alnum}
+            // See http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+            //
+            // \p{Alnum}    An alphanumeric character:[\p{Alpha}\p{Digit}]
+            //
+            // Note: It is meant to be used in a character group
+            //
+            String ALNUM_CHARS = ALPHA_CHARS + NUM_CHARS;
 
             //
             // Create the quivalent of Java's \p{Punct}
@@ -38,6 +56,11 @@ namespace Twitter.Text
             //
             String PUNCT_CHARS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".Replace(@"\", @"\\").Replace(@"]", @"\]").Replace(@"-", @"\-");
 
+            //
+            // Space is more than %20, U+3000 for example is the full-width space used with Kanji. Provide a short-hand
+            // to access both the list of characters and a pattern suitible for use with String#split
+            // Taken from: ActiveSupport::Multibyte::Handlers::UTF8Handler::UNICODE_WHITESPACE
+            //
             String UNICODE_SPACES = "[" +
                     "\u0009-\u000d" +     // White_Space # Cc [5]    <control-0009>..<control-000D>
                     "\u0020" +            // White_Space # Zs        SPACE
@@ -53,6 +76,18 @@ namespace Twitter.Text
                     "\u3000" +            // White_Space # Zs        IDEOGRAPHIC SPACE
                 "]";
 
+            // Character not allowed in Tweets
+            String INVALID_CONTROL_CHARS = "[" +
+                    "\ufffe\ufeff" +    // BOM
+                    "\uffff" +          // Special
+                    "\u202a-\u202e" +   // Directional change
+                "]";
+
+            //
+            // Latin accented characters
+            // Excludes 0xd7 from the range (the multiplication sign, confusable with "x").
+            // Also excludes 0xf7, the division sign
+            //
             String LATIN_ACCENTS_CHARS =
                 "\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u00ff" +                                     // Latin-1
                 "\u0100-\u024f" +                                                               // Latin Extended A and B
@@ -61,12 +96,18 @@ namespace Twitter.Text
                 "\u0300-\u036f" +                                                               // Combining diacritics
                 "\u1e00-\u1eff";                                                                // Latin Extended Additional (mostly for Vietnamese)
 
+            String RTL_CHARS =
+                "\u0600-\u06FF" +
+                "\u0750-\u077F" +
+                "\u0590-\u05FF" +
+                "\uFE70-\uFEFF";
+
             //
             // Hashtag related patterns
             //
 
             String HASHTAG_ALPHA_CHARS =
-                "a-z" + LATIN_ACCENTS_CHARS +
+                ALPHA_CHARS + LATIN_ACCENTS_CHARS +
                 "\u0400-\u04ff\u0500-\u0527" +                                          // Cyrillic
                 "\u2de0-\u2dff\ua640-\ua69f" +                                          // Cyrillic Extended A/B
                 "\u0591-\u05bf\u05c1-\u05c2\u05c4-\u05c5\u05c7" +
@@ -88,7 +129,7 @@ namespace Twitter.Text
                 "\uff66-\uff9f" +                                                       // half width Katakana
                 "\uffa1-\uffdc";                                                        // half width Hangul (Korean)
 
-            String HASHTAG_ALPHA_NUMERIC_CHARS = "0-9\uff10-\uff19_" + HASHTAG_ALPHA_CHARS;
+            String HASHTAG_ALPHA_NUMERIC_CHARS = HASHTAG_ALPHA_CHARS + NUM_CHARS + "\uff10-\uff19_";
 
             String HASHTAG_ALPHA = "[" + HASHTAG_ALPHA_CHARS + "]";
 
@@ -227,11 +268,13 @@ namespace Twitter.Text
             // Begin public constants
             //
 
+            INVALID_CHARACTERS = new Pattern(INVALID_CONTROL_CHARS, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
             VALID_HASHTAG = new Pattern(VALID_HASHTAG_STRING, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
             INVALID_HASHTAG_MATCH_END = new Pattern("^(?:[#＃]|://)", RegexOptions.Compiled);
 
-            RTL_CHARACTERS = new Pattern("[\u0600-\u06FF\u0750-\u077F\u0590-\u05FF\uFE70-\uFEFF]", RegexOptions.Compiled);
+            RTL_CHARACTERS = new Pattern("[" + RTL_CHARS + "]", RegexOptions.Compiled);
 
             AT_SIGNS = new Pattern("[" + AT_SIGNS_CHARS + "]", RegexOptions.Compiled);
 
@@ -249,6 +292,8 @@ namespace Twitter.Text
 
             VALID_CASHTAG = new Pattern("(^|" + UNICODE_SPACES + ")(" + DOLLAR_SIGN_CHAR + ")(" + CASHTAG + ")" + "(?=$|\\s|[" + PUNCT_CHARS + "])", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         }
+
+        public static readonly Pattern INVALID_CHARACTERS;
 
         public static readonly Pattern VALID_HASHTAG;
         public const int VALID_HASHTAG_GROUP_BEFORE = 1;

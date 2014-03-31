@@ -46,8 +46,7 @@ namespace Twitter.Text
             {
                 try
                 {
-                    Match match = Regex.VALID_REPLY.Match(test.text);
-                    bool actual = (match.Success && match.Value.Equals(test.text));
+                    bool actual = validator.IsValidUsername(test.text);
                     Assert.AreEqual(test.expected, actual);
                 }
                 catch (Exception)
@@ -62,7 +61,6 @@ namespace Twitter.Text
         }
 
         [Test]
-        [Ignore("Fails a couple tests")]
         public void ValidateListsTest()
         {
             List<string> failures = new List<string>();
@@ -70,8 +68,7 @@ namespace Twitter.Text
             {
                 try
                 {
-                    Match match = Regex.VALID_MENTION_OR_LIST.Match(test.text);
-                    bool actual = (match.Success && match.Value.Equals(test.text));
+                    bool actual = validator.IsValidList(test.text);
                     Assert.AreEqual(test.expected, actual);
                 }
                 catch (Exception)
@@ -93,8 +90,7 @@ namespace Twitter.Text
             {
                 try
                 {
-                    Match match = Regex.VALID_HASHTAG.Match(test.text);
-                    bool actual = (match.Success && match.Value.Equals(test.text));
+                    bool actual = validator.IsValidHashTag(test.text);
                     Assert.AreEqual(test.expected, actual);
                 }
                 catch (Exception)
@@ -117,8 +113,7 @@ namespace Twitter.Text
             {
                 try
                 {
-                    Match match = Regex.VALID_URL.Match(test.text);
-                    bool actual = (match.Success && match.Value.Equals(test.text));
+                    bool actual = validator.IsValidUrl(test.text);
                     Assert.AreEqual(test.expected, actual);
                 }
                 catch (Exception)
@@ -141,8 +136,7 @@ namespace Twitter.Text
             {
                 try
                 {
-                    Match match = Regex.VALID_URL.Match(test.text);
-                    bool actual = (match.Success && match.Value.Equals(test.text));
+                    bool actual = validator.IsValidUrl(test.text);
                     Assert.AreEqual(test.expected, actual);
                 }
                 catch (Exception)

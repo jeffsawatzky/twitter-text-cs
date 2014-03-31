@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Twitter.Text
 {
@@ -70,19 +71,96 @@ namespace Twitter.Text
                 return false;
             }
 
-            foreach (char c in text)
+            if (Regex.INVALID_CHARACTERS.IsMatch(text))
             {
-                if (
-                    c == '\uFFFE' || c == '\uFEFF' ||   // BOM
-                    c == '\uFFFF' ||                    // Special
-                    (c >= '\u202A' && c <= '\u202E')    // Direction change
-                )
-                {
-                    return false;
-                }
+                return false;
             }
 
             return this.GetTweetLength(text) <= MAX_TWEET_LENGTH;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public bool IsValidUsername(String text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return false;
+            }
+
+            // Must match whole string
+            Match match = Regex.VALID_REPLY.Match(text);
+            if (match.Success && match.Length == text.Length)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidList(String text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return false;
+            }
+
+            // Must match, have nothing before, and contain a list
+            Match match = Regex.VALID_MENTION_OR_LIST.Match(text);
+            if (match.Success &&
+                match.Length == text.Length &&
+                String.IsNullOrEmpty(match.Groups[Regex.VALID_MENTION_OR_LIST_GROUP_BEFORE].Value) &&
+                !String.IsNullOrEmpty(match.Groups[Regex.VALID_MENTION_OR_LIST_GROUP_LIST].Value))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidHashTag(String text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return false;
+            }
+
+            // Must match, have nothing before, and contain a list
+            Match match = Regex.VALID_HASHTAG.Match(text);
+            if (match.Success && match.Length == text.Length)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidUrl(String text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return false;
+            }
+
+            // Must match, have nothing before, and contain a list
+            Match match = Regex.VALID_URL.Match(text);
+            if (match.Success && match.Length == text.Length)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
