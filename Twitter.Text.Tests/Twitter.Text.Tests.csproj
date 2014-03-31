@@ -46,6 +46,7 @@
     <Compile Include="Extensions\StringExtensionsTest.cs" />
     <Compile Include="ExtractorTests.cs" />
     <Compile Include="HitHighlighterTests.cs" />
+    <Compile Include="RegexTests.cs" />
     <Compile Include="ValidatorTests.cs" />
     <Compile Include="ConformanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
