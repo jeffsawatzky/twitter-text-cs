@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -47,7 +48,7 @@ namespace Twitter.Text
             }
             catch { }
 
-            int length = text.Length;
+            int length = new StringInfo(text).LengthInTextElements;
             foreach (Extractor.Entity urlEntity in __Extractor.ExtractURLsWithIndices(text))
             {
                 // Subtract the length of the original URL

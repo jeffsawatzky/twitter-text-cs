@@ -15,6 +15,8 @@ namespace Twitter.Text
         {
         }
 
+        #region Conformance
+
         [Test]
         public void HighlightPlainTextTest()
         {
@@ -60,5 +62,10 @@ namespace Twitter.Text
                 Assert.Fail(string.Join("\n", failures));
             }
         }
+
+        #endregion
+
+        #region Additional
+        #endregion
     }
 }
