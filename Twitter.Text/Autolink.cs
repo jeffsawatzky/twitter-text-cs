@@ -147,6 +147,15 @@ namespace Twitter.Text
         /// Initializes a new instance of the <see cref="Autolink"/> class.
         /// </summary>
         public Autolink()
+            : this(false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Autolink"/> class.
+        /// </summary>
+        /// <param name="linkURLWithoutProtocol">Whether or not to link urls without a protocol</param>
+        public Autolink(bool linkURLWithoutProtocol)
         {
             UrlClass = null;
             ListClass = DEFAULT_LIST_CLASS;
@@ -159,7 +168,7 @@ namespace Twitter.Text
             CashtagUrlBase = DEFAULT_CASHTAG_URL_BASE;
             InvisibleTagAttrs = DEFAULT_INVISIBLE_TAG_ATTRS;
             NoFollow = true;
-            __Extractor = new Extractor { ExtractURLWithoutProtocol = false };
+            __Extractor = new Extractor { ExtractURLWithoutProtocol = linkURLWithoutProtocol };
         }
 
         /// <summary>

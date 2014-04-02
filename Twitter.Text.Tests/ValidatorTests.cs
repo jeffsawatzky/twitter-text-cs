@@ -107,7 +107,7 @@ namespace Twitter.Text
         }
 
         [Test]
-        [Ignore("Fails a couple tests")]
+        [Ignore("Fails a couple tests, but twitter's own twitter-text-java tests don't even run these, so...")]
         public void ValidateUrlsTest()
         {
             List<string> failures = new List<string>();
@@ -130,7 +130,7 @@ namespace Twitter.Text
         }
 
         [Test]
-        [Ignore("Fails a couple tests")]
+        [Ignore("Fails a couple tests, but twitter's own twitter-text-java tests don't even run these, so...")]
         public void ValidateUrlsWithoutProtocolTest()
         {
             List<string> failures = new List<string>();
