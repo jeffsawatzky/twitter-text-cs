@@ -277,29 +277,29 @@ namespace Twitter.Text
             // Begin public constants
             //
 
-            INVALID_CHARACTERS = new Pattern(INVALID_CONTROL_CHARS, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            INVALID_CHARACTERS = new Pattern(INVALID_CONTROL_CHARS, RegexOptions.IgnoreCase);
 
-            VALID_HASHTAG = new Pattern(VALID_HASHTAG_STRING, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            VALID_HASHTAG = new Pattern(VALID_HASHTAG_STRING, RegexOptions.IgnoreCase);
 
-            INVALID_HASHTAG_MATCH_END = new Pattern("^(?:[#＃]|://)", RegexOptions.Compiled);
+            INVALID_HASHTAG_MATCH_END = new Pattern("^(?:[#＃]|://)");
 
-            RTL_CHARACTERS = new Pattern("[" + RTL_CHARS + "]", RegexOptions.Compiled);
+            RTL_CHARACTERS = new Pattern("[" + RTL_CHARS + "]");
 
-            AT_SIGNS = new Pattern("[" + AT_SIGNS_CHARS + "]", RegexOptions.Compiled);
+            AT_SIGNS = new Pattern("[" + AT_SIGNS_CHARS + "]");
 
-            VALID_MENTION_OR_LIST = new Pattern("([^a-z0-9_!#$%&*" + AT_SIGNS_CHARS + "]|^|RT:?)(" + AT_SIGNS + "+)([a-z0-9_]{1,20})(/[a-z][a-z0-9_\\-]{0,24})?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            VALID_MENTION_OR_LIST = new Pattern("([^a-z0-9_!#$%&*" + AT_SIGNS_CHARS + "]|^|RT:?)(" + AT_SIGNS + "+)([a-z0-9_]{1,20})(/[a-z][a-z0-9_\\-]{0,24})?", RegexOptions.IgnoreCase);
 
-            VALID_REPLY = new Pattern("^(?:" + UNICODE_SPACES + ")*" + AT_SIGNS + "([a-z0-9_]{1,20})", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            VALID_REPLY = new Pattern("^(?:" + UNICODE_SPACES + ")*" + AT_SIGNS + "([a-z0-9_]{1,20})", RegexOptions.IgnoreCase);
 
-            INVALID_MENTION_MATCH_END = new Pattern("^(?:[" + AT_SIGNS_CHARS + LATIN_ACCENTS_CHARS + "]|://)", RegexOptions.Compiled);
+            INVALID_MENTION_MATCH_END = new Pattern("^(?:[" + AT_SIGNS_CHARS + LATIN_ACCENTS_CHARS + "]|://)");
 
-            VALID_URL = new Pattern(VALID_URL_PATTERN_STRING, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            VALID_URL = new Pattern(VALID_URL_PATTERN_STRING, RegexOptions.IgnoreCase);
 
-            VALID_TCO_URL = new Pattern("^https?:\\/\\/t\\.co\\/[a-z0-9]+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            VALID_TCO_URL = new Pattern("^https?:\\/\\/t\\.co\\/[a-z0-9]+", RegexOptions.IgnoreCase);
 
-            INVALID_URL_WITHOUT_PROTOCOL_MATCH_BEGIN = new Pattern("[-_./]$", RegexOptions.Compiled);
+            INVALID_URL_WITHOUT_PROTOCOL_MATCH_BEGIN = new Pattern("[-_./]$");
 
-            VALID_CASHTAG = new Pattern("(^|" + UNICODE_SPACES + ")(" + DOLLAR_SIGN_CHAR + ")(" + CASHTAG + ")" + "(?=$|\\s|[" + PUNCT_CHARS + "])", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            VALID_CASHTAG = new Pattern("(^|" + UNICODE_SPACES + ")(" + DOLLAR_SIGN_CHAR + ")(" + CASHTAG + ")" + "(?=$|\\s|[" + PUNCT_CHARS + "])", RegexOptions.IgnoreCase);
         }
 
         public static readonly Pattern INVALID_CHARACTERS;

@@ -38,13 +38,13 @@ namespace Twitter.Text
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">Target of string. Should be normalized 'NormalizationForm.FormC'</param>
         /// <returns></returns>
         public int GetTweetLength(String text)
         {
             try
             {
-                text = text.Normalize(NormalizationForm.FormC);
+                //text = text.Normalize(NormalizationForm.FormC);
             }
             catch { }
 
