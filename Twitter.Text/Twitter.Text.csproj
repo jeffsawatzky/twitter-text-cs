@@ -41,7 +41,21 @@
     <Compile Include="HitHighlighter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regex.cs" />
+    <Compile Include="TldLib.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TldLib.tt</DependentUpon>
+    </Compile>
     <Compile Include="Validator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TldLib.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TldLib.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
