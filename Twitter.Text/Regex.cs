@@ -157,23 +157,25 @@ namespace Twitter.Text
             String SPECIAL_URL_VALID_CCTLD = "(?:(?:" + "co|tv" + ")(?=[^" + ALNUM_CHARS + "@]|$))";
 
             String URL_VALID_DOMAIN =
-                "(?:" +                                                             // subdomains + domain + TLD
-                    URL_VALID_SUBDOMAIN + "+" + URL_VALID_DOMAIN_NAME +             // e.g. www.twitter.com, foo.co.jp, bar.co.uk
+                "(?:" +                                                   // subdomains + domain + TLD
+                    URL_VALID_SUBDOMAIN + "+" + URL_VALID_DOMAIN_NAME +   // e.g. www.twitter.com, foo.co.jp, bar.co.uk
                     "(?:" + URL_VALID_GTLD + "|" + URL_VALID_CCTLD + "|" + URL_PUNYCODE + ")" +
-                ")|(?:" +                                                           // domain + gTLD + some ccTLD
-                    URL_VALID_DOMAIN_NAME +                                         // e.g. twitter.com
-                    "(?:" + URL_VALID_GTLD + "|" + URL_PUNYCODE + "|" + SPECIAL_URL_VALID_CCTLD + ")" +
-                ")|(?:" + "(?<=https?://)" +
-                    "(?:" +
-                        "(?:" +
-                            URL_VALID_DOMAIN_NAME + URL_VALID_CCTLD +               // protocol + domain + ccTLD
-                        ")|(?:" +
-                            URL_VALID_UNICODE_CHARS + "+\\." +                      // protocol + unicode domain + TLD
-                            "(?:" + URL_VALID_GTLD + "|" + URL_VALID_CCTLD + ")" +
-                        ")" +
                     ")" +
-                ")|(?:" +                                                           // domain + ccTLD + '/'
-                    URL_VALID_DOMAIN_NAME + URL_VALID_CCTLD + "(?=/)" +             // e.g. t.co/
+                "|(?:" +                                                  // domain + gTLD + some ccTLD
+                    URL_VALID_DOMAIN_NAME +                                 // e.g. twitter.com
+                    "(?:" + URL_VALID_GTLD + "|" + URL_PUNYCODE + "|" + SPECIAL_URL_VALID_CCTLD + ")" +
+                ")" +
+                "|(?:" + "(?<=https?://)" +
+                    "(?:" +
+                    "(?:" + URL_VALID_DOMAIN_NAME + URL_VALID_CCTLD + ")" +  // protocol + domain + ccTLD
+                    "|(?:" +
+                        URL_VALID_UNICODE_CHARS + "+\\." +                     // protocol + unicode domain + TLD
+                        "(?:" + URL_VALID_GTLD + "|" + URL_VALID_CCTLD + ")" +
+                    ")" +
+                    ")" +
+                ")" +
+                "|(?:" +                                                  // domain + ccTLD + '/'
+                    URL_VALID_DOMAIN_NAME + URL_VALID_CCTLD + "(?=/)" +     // e.g. t.co/
                 ")";
 
             String URL_VALID_PORT_NUMBER = "(?>[0-9]+)";
