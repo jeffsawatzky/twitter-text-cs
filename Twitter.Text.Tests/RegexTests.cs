@@ -91,8 +91,8 @@ namespace Twitter.Text
             Assert.True(Regex.VALID_URL.Match("www.foo.co.jp").Success, "Matching a URL with ccTLD without protocol.");
             Assert.True(Regex.VALID_URL.Match("www.foo.org.za").Success, "Matching a URL with gTLD followed by ccTLD without protocol.");
             Assert.True(Regex.VALID_URL.Match("http://t.co").Success, "Should not match a short URL with ccTLD without protocol.");
-            Assert.False(Regex.VALID_URL.Match("t.co").Success, "Should not match a short URL with ccTLD without protocol.");
-            Assert.False(Regex.VALID_URL.Match("www.foo.baz").Success, "Should not match a URL with invalid gTLD.");
+            Assert.False(Regex.VALID_URL.Match("it.so").Success, "Should not match a short URL with ccTLD without protocol.");
+            Assert.False(Regex.VALID_URL.Match("www.xxxxxxx.baz").Success, "Should not match a URL with invalid gTLD.");
             Assert.True(Regex.VALID_URL.Match("t.co/blahblah").Success, "Match a short URL with ccTLD and '/' but without protocol.");
         }
 
