@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using Pattern = System.Text.RegularExpressions.Regex;
 
@@ -56,6 +59,10 @@ namespace Twitter.Text
             //
             String PUNCT_CHARS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".Replace(@"\", @"\\").Replace(@"]", @"\]").Replace(@"-", @"\-");
 
+            String URL_VALID_GTLD = "(?:(?:" + string.Join("|", TldLib.Generic) + ")(?=[^" + ALNUM_CHARS + "@]|$))";
+
+            String URL_VALID_CCTLD = "(?:(?:" + string.Join("|", TldLib.Country) + ")(?=[^" + ALNUM_CHARS + "@]|$))";
+
             //
             // Space is more than %20, U+3000 for example is the full-width space used with Kanji. Provide a short-hand
             // to access both the list of characters and a pattern suitible for use with String#split
@@ -106,30 +113,23 @@ namespace Twitter.Text
             // Hashtag related patterns
             //
 
-            String HASHTAG_ALPHA_CHARS =
-                ALPHA_CHARS + LATIN_ACCENTS_CHARS +
-                "\u0400-\u04ff\u0500-\u0527" +                                          // Cyrillic
-                "\u2de0-\u2dff\ua640-\ua69f" +                                          // Cyrillic Extended A/B
-                "\u0591-\u05bf\u05c1-\u05c2\u05c4-\u05c5\u05c7" +
-                "\u05d0-\u05ea\u05f0-\u05f4" +                                          // Hebrew
-                "\ufb1d-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40-\ufb41" +
-                "\ufb43-\ufb44\ufb46-\ufb4f" +                                          // Hebrew Pres. Forms
-                "\u0610-\u061a\u0620-\u065f\u066e-\u06d3\u06d5-\u06dc" +
-                "\u06de-\u06e8\u06ea-\u06ef\u06fa-\u06fc\u06ff" +                       // Arabic
-                "\u0750-\u077f\u08a0\u08a2-\u08ac\u08e4-\u08fe" +                       // Arabic Supplement and Extended A
-                "\ufb50-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb" +   // Pres. Forms A
-                "\ufe70-\ufe74\ufe76-\ufefc" +                                          // Pres. Forms B
-                "\u200c" +                                                              // Zero-Width Non-Joiner
-                "\u0e01-\u0e3a\u0e40-\u0e4e" +                                          // Thai
-                "\u1100-\u11ff\u3130-\u3185\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF" +   // Hangul (Korean)
-                "\\p{IsHiragana}\\p{IsKatakana}" +                                      // Japanese Hiragana and Katakana
-                "\\p{IsCJKUnifiedIdeographs}" +                                         // Japanese Kanji / Chinese Han
-                "\u3003\u3005\u303b" +                                                  // Kanji/Han iteration marks
-                "\uff21-\uff3a\uff41-\uff5a" +                                          // full width Alphabet
-                "\uff66-\uff9f" +                                                       // half width Katakana
-                "\uffa1-\uffdc";                                                        // half width Hangul (Korean)
-
-            String HASHTAG_ALPHA_NUMERIC_CHARS = HASHTAG_ALPHA_CHARS + NUM_CHARS + "\uff10-\uff19_";
+            String HASHTAG_ALPHA_CHARS = "\\p{L}\\p{M}";
+            String HASHTAG_NUMERALS = "\\p{Nd}";
+            String HASHTAG_SPECIAL_CHARS = "_" + //underscore
+                                           "\\u200c" + // ZERO WIDTH NON-JOINER (ZWNJ)
+                                           "\\ua67e" + // CYRILLIC KAVYKA
+                                           "\\u05be" + // HEBREW PUNCTUATION MAQAF
+                                           "\\u05f3" + // HEBREW PUNCTUATION GERESH
+                                           "\\u05f4" + // HEBREW PUNCTUATION GERSHAYIM
+                                           "\\u309b" + // KATAKANA-HIRAGANA VOICED SOUND MARK
+                                           "\\u309c" + // KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
+                                           "\\u30a0" + // KATAKANA-HIRAGANA DOUBLE HYPHEN
+                                           "\\u30fb" + // KATAKANA MIDDLE DOT
+                                           "\\u3003" + // DITTO MARK
+                                           "\\u0f0b" + // TIBETAN MARK INTERSYLLABIC TSHEG
+                                           "\\u0f0c" + // TIBETAN MARK DELIMITER TSHEG BSTAR
+                                           "\\u0f0d";  // TIBETAN MARK SHAD
+            String HASHTAG_ALPHA_NUMERIC_CHARS = HASHTAG_ALPHA_CHARS + HASHTAG_NUMERALS + HASHTAG_SPECIAL_CHARS;
 
             String HASHTAG_ALPHA = "[" + HASHTAG_ALPHA_CHARS + "]";
 
@@ -145,51 +145,24 @@ namespace Twitter.Text
 
             String URL_VALID_CHARS = ALNUM_CHARS + LATIN_ACCENTS_CHARS;
 
-            String URL_VALID_SUBDOMAIN = "(?:(?:[" + URL_VALID_CHARS + "][" + URL_VALID_CHARS + "\\-_]*)?[" + URL_VALID_CHARS + "]\\.)";
+            String URL_VALID_SUBDOMAIN = "(?>(?:[" + URL_VALID_CHARS + "][" + URL_VALID_CHARS + "\\-_]*)?[" + URL_VALID_CHARS + "]\\.)";
 
             String URL_VALID_DOMAIN_NAME = "(?:(?:[" + URL_VALID_CHARS + "][" + URL_VALID_CHARS + "\\-]*)?[" + URL_VALID_CHARS + "]\\.)";
 
             // Any non-space, non-punctuation characters. \p{Z} = any kind of whitespace or invisible separator.
             String URL_VALID_UNICODE_CHARS = "(?:\\.|[^" + PUNCT_CHARS + "\\s\\p{Z}\\p{IsGeneralPunctuation}])";
 
-            String URL_VALID_GTLD =
-                "(?:(?:academy|actor|aero|agency|arpa|asia|bar|bargains|berlin|best|bid|bike|biz|blue|boutique|build|builders|" +
-                "buzz|cab|camera|camp|cards|careers|cat|catering|center|ceo|cheap|christmas|cleaning|clothing|club|codes|" +
-                "coffee|com|community|company|computer|construction|contractors|cool|coop|cruises|dance|dating|democrat|" +
-                "diamonds|directory|domains|edu|education|email|enterprises|equipment|estate|events|expert|exposed|farm|fish|" +
-                "flights|florist|foundation|futbol|gallery|gift|glass|gov|graphics|guitars|guru|holdings|holiday|house|" +
-                "immobilien|industries|info|institute|int|international|jobs|kaufen|kim|kitchen|kiwi|koeln|kred|land|lighting|" +
-                "limo|link|luxury|management|mango|marketing|menu|mil|mobi|moda|monash|museum|nagoya|name|net|neustar|ninja|" +
-                "okinawa|onl|org|partners|parts|photo|photography|photos|pics|pink|plumbing|post|pro|productions|properties|" +
-                "pub|qpon|recipes|red|rentals|repair|report|reviews|rich|ruhr|sexy|shiksha|shoes|singles|social|solar|" +
-                "solutions|supplies|supply|support|systems|tattoo|technology|tel|tienda|tips|today|tokyo|tools|training|" +
-                "travel|uno|vacations|ventures|viajes|villas|vision|vote|voting|voto|voyage|wang|watch|wed|wien|wiki|works|" +
-                "xxx|xyz|zone|дети|онлайн|орг|сайт|بازار|شبكة|みんな|中信|中文网|公司|公益|在线|我爱你|政务|游戏|移动|网络|集团|삼성)" +
-                "(?=[^" + ALNUM_CHARS + "@]|$))";
-
-
-            String URL_VALID_CCTLD =
-                "(?:(?:ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bl|bm|bn|bo|bq|br|bs|" +
-                "bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|" +
-                "et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|" +
-                "im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|" +
-                "me|mf|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|" +
-                "pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|" +
-                "sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|" +
-                "ye|yt|za|zm|zw|мон|рф|срб|укр|қаз|الاردن|الجزائر|السعودية|المغرب|امارات|ایران|بھارت|تونس|سودان|سورية|عمان|فلسطين|قطر|مصر|مليسيا|پاکستان|" +
-                "भारत|বাংলা|ভারত|ਭਾਰਤ|ભારત|இந்தியா|இலங்கை|சிங்கப்பூர்|భారత్|ලංකා|ไทย|გე|中国|中國|台湾|台灣|新加坡|" +
-                "香港|한국)(?=[^" + ALNUM_CHARS + "@]|$))";
-
-
             String URL_PUNYCODE = "(?:xn--[0-9a-z]+)";
+
+            String SPECIAL_URL_VALID_CCTLD = "(?:(?:" + "co|tv" + ")(?=[^" + ALNUM_CHARS + "@]|$))";
 
             String URL_VALID_DOMAIN =
                 "(?:" +                                                             // subdomains + domain + TLD
                     URL_VALID_SUBDOMAIN + "+" + URL_VALID_DOMAIN_NAME +             // e.g. www.twitter.com, foo.co.jp, bar.co.uk
                     "(?:" + URL_VALID_GTLD + "|" + URL_VALID_CCTLD + "|" + URL_PUNYCODE + ")" +
-                ")|(?:" +                                                           // domain + gTLD
+                ")|(?:" +                                                           // domain + gTLD + some ccTLD
                     URL_VALID_DOMAIN_NAME +                                         // e.g. twitter.com
-                    "(?:" + URL_VALID_GTLD + "|" + URL_PUNYCODE + ")" +
+                    "(?:" + URL_VALID_GTLD + "|" + URL_PUNYCODE + "|" + SPECIAL_URL_VALID_CCTLD + ")" +
                 ")|(?:" + "(?<=https?://)" +
                     "(?:" +
                         "(?:" +
