@@ -6,15 +6,13 @@ C# port of the twitter-text handling libraries.
 
 ## Building
 
-To build, ensure you have the conformance test suite checked out:
-
-```git submodule init && git submodule update```
+To build, open Twitter.sln in VisualStudio, and build it.
 
 ## Issues
 
 Have a bug? Please create an issue here on GitHub!
 
-https://github.com/niltz/twitter-text-cs/issues
+https://github.com/tmyt/twitter-text-cs/issues
 
 ## License
 
