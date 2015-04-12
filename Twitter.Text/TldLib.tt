@@ -8,8 +8,8 @@
 
 namespace Twitter.Text
 {
-	public static class TldLib
-	{
+    public static class TldLib
+    {
 <#
  // Read tld_lib.yml
  var tldlib = File.ReadAllText(this.Host.ResolvePath("Conformance\\tld_lib.yml"));
@@ -24,29 +24,29 @@ namespace Twitter.Text
    while(s != null)
    {
      if(s.EndsWith(":"))
-	 {
-	   // close field,if needed
-	   if(b){
-	     #>};
+     {
+       // close field,if needed
+       if(b){
+         #>};
 <#
-	   }
-	   // generate field
-	   var name = (s[0]).ToString().ToUpper() + s.Substring(1, s.Length - 2);
+       }
+       // generate field
+       var name = (s[0]).ToString().ToUpper() + s.Substring(1, s.Length - 2);
 #>
-	    public static string[] <#= name #> = {
+        public static string[] <#= name #> = {
 <#
        b = false;
-	 }else{
-	   var tld = s.Substring(2)
-	              .Replace("'", "")
-				  .Replace("\"", "");
-	   if(b){ #>, <# }
-	   b = true;
-	   #>"<#= tld #>"<#
-	 }
-	 s = reader.ReadLine();
+     }else{
+       var tld = s.Substring(2)
+                  .Replace("'", "")
+                  .Replace("\"", "");
+       if(b){ #>, <# }
+       b = true;
+       #>"<#= tld #>"<#
+     }
+     s = reader.ReadLine();
    }
  }
 #>};
-	}
+    }
 }
