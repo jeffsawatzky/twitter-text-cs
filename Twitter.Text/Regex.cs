@@ -113,10 +113,11 @@ namespace Twitter.Text
             // Hashtag related patterns
             //
 
-            String HASHTAG_ALPHA_CHARS = "\\p{L}\\p{M}";
+            String HASHTAG_LETTERS = "\\p{L}\\p{M}";
             String HASHTAG_NUMERALS = "\\p{Nd}";
             String HASHTAG_SPECIAL_CHARS = "_" + //underscore
                                            "\\u200c" + // ZERO WIDTH NON-JOINER (ZWNJ)
+                                           "\\u200d" + // ZERO WIDTH JOINER (ZWJ)
                                            "\\ua67e" + // CYRILLIC KAVYKA
                                            "\\u05be" + // HEBREW PUNCTUATION MAQAF
                                            "\\u05f3" + // HEBREW PUNCTUATION GERESH
@@ -129,13 +130,13 @@ namespace Twitter.Text
                                            "\\u0f0b" + // TIBETAN MARK INTERSYLLABIC TSHEG
                                            "\\u0f0c" + // TIBETAN MARK DELIMITER TSHEG BSTAR
                                            "\\u0f0d";  // TIBETAN MARK SHAD
-            String HASHTAG_ALPHA_NUMERIC_CHARS = HASHTAG_ALPHA_CHARS + HASHTAG_NUMERALS + HASHTAG_SPECIAL_CHARS;
+            String HASHTAG_LETTERS_NUMERALS = HASHTAG_LETTERS + HASHTAG_NUMERALS + HASHTAG_SPECIAL_CHARS;
 
-            String HASHTAG_ALPHA = "[" + HASHTAG_ALPHA_CHARS + "]";
+            String HASHTAG_LETTERS_SET = "[" + HASHTAG_LETTERS + "]";
 
-            String HASHTAG_ALPHA_NUMERIC = "[" + HASHTAG_ALPHA_NUMERIC_CHARS + "]";
+            String HASHTAG_LETTERS_NUMERALS_SET = "[" + HASHTAG_LETTERS_NUMERALS + "]";
 
-            String VALID_HASHTAG_STRING = "(^|[^&" + HASHTAG_ALPHA_NUMERIC_CHARS + "])(#|\uFF03)(" + HASHTAG_ALPHA_NUMERIC + "*" + HASHTAG_ALPHA + HASHTAG_ALPHA_NUMERIC + "*)";
+            String VALID_HASHTAG_STRING = "(^|[^&" + HASHTAG_LETTERS_NUMERALS + "])(#|\uFF03)(" + HASHTAG_LETTERS_NUMERALS_SET + "*" + HASHTAG_LETTERS_SET + HASHTAG_LETTERS_NUMERALS_SET + "*)";
 
             //
             // URL related patterns
