@@ -263,7 +263,7 @@ namespace Twitter.Text
 
             AT_SIGNS = new Pattern("[" + AT_SIGNS_CHARS + "]");
 
-            VALID_MENTION_OR_LIST = new Pattern("([^a-z0-9_!#$%&*" + AT_SIGNS_CHARS + "]|^|RT:?)(" + AT_SIGNS + "+)([a-z0-9_]{1,20})(/[a-z][a-z0-9_\\-]{0,24})?", RegexOptions.IgnoreCase);
+            VALID_MENTION_OR_LIST = new Pattern("([^a-z0-9_!#$%&*" + AT_SIGNS_CHARS + "]|^|(?:^|[^a-z0-9_+~.-])RT:?)(" + AT_SIGNS + "+)([a-z0-9_]{1,20})(/[a-z][a-z0-9_\\-]{0,24})?", RegexOptions.IgnoreCase);
 
             VALID_REPLY = new Pattern("^(?:" + UNICODE_SPACES + ")*" + AT_SIGNS + "([a-z0-9_]{1,20})", RegexOptions.IgnoreCase);
 

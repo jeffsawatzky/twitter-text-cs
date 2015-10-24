@@ -10,7 +10,7 @@ namespace Twitter.Text
     /// </summary>
     public class Validator
     {
-        protected const int SHORT_URL_LENGTH = 22;
+        protected const int SHORT_URL_LENGTH = 23;
         protected const int SHORT_URL_LENGTH_HTTPS = 23;
         public const int MAX_TWEET_LENGTH = 140;
 
