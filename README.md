@@ -12,7 +12,7 @@ To build, open Twitter.sln in VisualStudio, and build it.
 
 Have a bug? Please create an issue here on GitHub!
 
-https://github.com/tmyt/twitter-text-cs/issues
+https://github.com/niltz/twitter-text-cs/issues
 
 ## License
 
