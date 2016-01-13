@@ -65,6 +65,8 @@
     <Content Include="twitter-text-conformance\validate.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="twitter-text-conformance\tlds.yml" />
+    <None Include="twitter-text-conformance\tld_lib.yml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Twitter.Text\Twitter.Text.csproj">

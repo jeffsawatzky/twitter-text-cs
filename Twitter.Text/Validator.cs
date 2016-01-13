@@ -10,7 +10,7 @@ namespace Twitter.Text
     /// </summary>
     public class Validator
     {
-        protected const int SHORT_URL_LENGTH = 22;
+        protected const int SHORT_URL_LENGTH = 23;
         protected const int SHORT_URL_LENGTH_HTTPS = 23;
         public const int MAX_TWEET_LENGTH = 140;
 
@@ -38,13 +38,13 @@ namespace Twitter.Text
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">Target of string. Should be normalized 'NormalizationForm.FormC'</param>
         /// <returns></returns>
         public int GetTweetLength(String text)
         {
             try
             {
-                text = text.Normalize(NormalizationForm.FormC);
+                //text = text.Normalize(NormalizationForm.FormC);
             }
             catch { }
 
