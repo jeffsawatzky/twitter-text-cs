@@ -181,7 +181,7 @@ namespace Twitter.Text
 
             String URL_VALID_PORT_NUMBER = "(?>[0-9]+)";
 
-            String URL_VALID_GENERAL_PATH_CHARS = "[a-z0-9!\\*';:=\\+,.\\$/%#\\[\\]\\-_~\\|&@" + LATIN_ACCENTS_CHARS + "]";
+            String URL_VALID_GENERAL_PATH_CHARS = "[a-z\\p{IsCyrillic}0-9!\\*';:=\\+,.\\$/%#\\[\\]\\-_~\\|&@" + LATIN_ACCENTS_CHARS + "]";
 
             //
             // Allow URL paths to contain up to two nested levels of balanced parens
@@ -209,7 +209,7 @@ namespace Twitter.Text
             // Valid end-of-path characters (so /foo. does not gobble the period).
             //   1. Allow =&# for empty URL parameters and other URL-join artifacts
             //
-            String URL_VALID_PATH_ENDING_CHARS = "[a-z0-9=_#/\\-\\+" + LATIN_ACCENTS_CHARS + "]|(?:" + URL_BALANCED_PARENS + ")";
+            String URL_VALID_PATH_ENDING_CHARS = "[a-z\\p{IsCyrillic}0-9=_#/\\-\\+" + LATIN_ACCENTS_CHARS + "]|(?:" + URL_BALANCED_PARENS + ")";
 
             String URL_VALID_PATH =
                 "(?:" +
