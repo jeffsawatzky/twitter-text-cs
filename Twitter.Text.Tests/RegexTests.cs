@@ -76,11 +76,16 @@ namespace Twitter.Text
             foreach (String text in repeatedPaths)
             {
                 stopWatch.Restart();
+                int NUM_RUNS = 100;
+                for(int i = 0; i < NUM_RUNS - 1; i++)
+                {
+                    Regex.VALID_URL.Match(text).Success;
+                }
                 bool isValid = Regex.VALID_URL.Match(text).Success;
                 stopWatch.Stop();
 
                 Assert.True(isValid, "Should be able to extract a valid URL even followed by punctuations");
-                Assert.True((stopWatch.ElapsedMilliseconds < 10), "Matching a repeated path end should take less than 10ms (took " + stopWatch.ElapsedMilliseconds + "ms)");
+                Assert.True((stopWatch.ElapsedMilliseconds < 10 * NUM_RUNS), "Matching a repeated path end should take less than 10ms (took " + (stopWatch.ElapsedMilliseconds / NUM_RUNS) + "ms)");
             }
         }
 
