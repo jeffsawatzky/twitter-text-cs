@@ -122,6 +122,8 @@ namespace Twitter.Text
                                            "\\u05be" + // HEBREW PUNCTUATION MAQAF
                                            "\\u05f3" + // HEBREW PUNCTUATION GERESH
                                            "\\u05f4" + // HEBREW PUNCTUATION GERSHAYIM
+                                           "\\uff5e" + // FULLWIDTH TILDE
+                                           "\\u301c" + // WAVE DASH
                                            "\\u309b" + // KATAKANA-HIRAGANA VOICED SOUND MARK
                                            "\\u309c" + // KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
                                            "\\u30a0" + // KATAKANA-HIRAGANA DOUBLE HYPHEN
@@ -130,13 +132,14 @@ namespace Twitter.Text
                                            "\\u0f0b" + // TIBETAN MARK INTERSYLLABIC TSHEG
                                            "\\u0f0c" + // TIBETAN MARK DELIMITER TSHEG BSTAR
                                            "\\u0f0d";  // TIBETAN MARK SHAD
+
             String HASHTAG_LETTERS_NUMERALS = HASHTAG_LETTERS + HASHTAG_NUMERALS + HASHTAG_SPECIAL_CHARS;
 
             String HASHTAG_LETTERS_SET = "[" + HASHTAG_LETTERS + "]";
 
             String HASHTAG_LETTERS_NUMERALS_SET = "[" + HASHTAG_LETTERS_NUMERALS + "]";
 
-            String VALID_HASHTAG_STRING = "(^|[^&" + HASHTAG_LETTERS_NUMERALS + "])(#|\uFF03)(" + HASHTAG_LETTERS_NUMERALS_SET + "*" + HASHTAG_LETTERS_SET + HASHTAG_LETTERS_NUMERALS_SET + "*)";
+            String VALID_HASHTAG_STRING = "(^|[^&" + HASHTAG_LETTERS_NUMERALS + "])(#|\uFF03)(?!\uFE0F|\u20E3)(" + HASHTAG_LETTERS_NUMERALS_SET + "*" + HASHTAG_LETTERS_SET + HASHTAG_LETTERS_NUMERALS_SET + "*)";
 
             //
             // URL related patterns
@@ -181,7 +184,7 @@ namespace Twitter.Text
 
             String URL_VALID_PORT_NUMBER = "(?>[0-9]+)";
 
-            String URL_VALID_GENERAL_PATH_CHARS = "[a-z0-9!\\*';:=\\+,.\\$/%#\\[\\]\\-_~\\|&@" + LATIN_ACCENTS_CHARS + "]";
+            String URL_VALID_GENERAL_PATH_CHARS = "[a-z\\p{IsCyrillic}0-9!\\*';:=\\+,.\\$/%#\\[\\]\\-_~\\|&@" + LATIN_ACCENTS_CHARS + "]";
 
             //
             // Allow URL paths to contain up to two nested levels of balanced parens
@@ -209,7 +212,7 @@ namespace Twitter.Text
             // Valid end-of-path characters (so /foo. does not gobble the period).
             //   1. Allow =&# for empty URL parameters and other URL-join artifacts
             //
-            String URL_VALID_PATH_ENDING_CHARS = "[a-z0-9=_#/\\-\\+" + LATIN_ACCENTS_CHARS + "]|(?:" + URL_BALANCED_PARENS + ")";
+            String URL_VALID_PATH_ENDING_CHARS = "[a-z\\p{IsCyrillic}0-9=_#/\\-\\+" + LATIN_ACCENTS_CHARS + "]|(?:" + URL_BALANCED_PARENS + ")";
 
             String URL_VALID_PATH =
                 "(?:" +
